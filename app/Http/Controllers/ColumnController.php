@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Card;
 use App\Models\Column;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -42,28 +44,6 @@ class ColumnController extends Controller
         return response()->json(['data' => $column, 'message' => 'Column added succssfully', 'status' => 201]);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
 
     /**
      * Remove the specified resource from storage.
@@ -73,6 +53,10 @@ class ColumnController extends Controller
      */
     public function destroy(Column $column)
     {
+        $card = Card::where('column_id', $column->id)->get();
+        foreach ($card as $item) {
+            $item->delete();
+        }
         $column->delete();
         $freshColumns = Column::with('cards')->get();
         return response()->json(['data' => $freshColumns, 'message' => 'Column deleted Successfully']);

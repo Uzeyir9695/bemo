@@ -3,31 +3,12 @@
 namespace App\Http\Controllers;
 use App\Models\Card;
 use App\Models\User;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 
 class CardController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         $validator = Validator::make($request->only(['column_id', 'title', 'description']), [
@@ -48,8 +29,6 @@ class CardController extends Controller
             'description' => $request->description,
             'access_token' => $primary_access_token
         ]);
-
-
 
         return response()->json(['data' => $card, 'message' => 'Column added succssfully', 'status' => 201]);
     }

@@ -2,9 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Client\ResponseSequence;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Response;
 use Spatie\DbDumper\Databases\MySql;
 
 class ExportSQLController extends Controller
@@ -16,11 +13,12 @@ class ExportSQLController extends Controller
             ->setUserName(env('DB_USERNAME'))
             ->setPassword(env('DB_PASSWORD'))
             ->includeTables(['columns', 'cards'])
-            ->dumpToFile(base_path('database/schema/mysql-schema.dump'));
+            ->dumpToFile(base_path('database/schema/mysql-schema.sql'));
 
         $headers = [
-            'Content-Type' => 'application/dump',
+            'Content-Type: application/blob',
         ];
-            return response()->download(base_path('database/schema/mysql-schema.dump'), 'db.dump', $headers);
+
+        return response()->download(base_path('database/schema/mysql-schema.sql'), 'db.sql', $headers);
     }
 }

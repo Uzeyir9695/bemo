@@ -1,5 +1,5 @@
 <template>
-    <div class="row mt-1">
+    <div class="row mt-1 board">
         <div class="col-2 ml-2">
             <!-- Button HTML (to Trigger Modal) -->
             <a href="#myModal" role="button" class="btn btn-primary" data-bs-toggle="modal">Add column</a>
@@ -34,10 +34,10 @@
             </div>
         </div>
     </div>
-    <div class="row">
+    <div class="row board">
         <div class="row mt-2">
             <!-- Columns -->
-            <div class="col-3" v-for="(column, key) in columns" :key="column.id">
+            <div class="col-3" v-for="column in columns" :key="column.id">
                 <div class="card text-white bg-info mb-4" :id="column.id">
                     <div class="card-body">
                         <div class="d-flex justify-content-center bg-warning mb-3 column-title p-2">
@@ -57,7 +57,7 @@
             </div>
         </div>
     </div>
-    <div class="row" v-if="columns.length > 0">
+    <div class="row board" v-if="columns.length > 0">
         <div class="col-2 ml-1">
             <a id="dumpsql" type="button" class="btn bg-info" @click="exportSQL">Export board SQL</a>
         </div>
@@ -113,10 +113,14 @@ data() {
 
     methods: {
         exportSQL() {
-
             axios.get('api/export-sql')
             .then(res => {
-                console.log('Dumped')
+                var fileURL = window.URL.createObjectURL(new Blob([res.data]));
+                var fileLink = document.createElement('a');
+                fileLink.href = fileURL;
+                fileLink.setAttribute('download', 'bemo.sql');
+                document.body.appendChild(fileLink);
+                fileLink.click();
             })
         },
         // Get future card, column ids and position index and set is as object
@@ -126,7 +130,6 @@ data() {
                 card_id: JSON.parse(JSON.stringify(evt.draggedContext.element.id)),
                 new_index: JSON.parse(JSON.stringify(evt.draggedContext.futureIndex))
             }
-            // console.log(this.updatedCardPosition)
         },
 
         // When card is moved into other column's list keep, it in that column's list even after page refresh
@@ -213,6 +216,10 @@ data() {
 </script>
 
 <style>
+
+.board {
+    margin-left: 20px;
+}
 .column-title {
     border-radius: 50px;
     font-size: 18px;
