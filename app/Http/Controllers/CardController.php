@@ -93,14 +93,21 @@ class CardController extends Controller
                     case('0'):
                         $card->onlyTrashed();
                         break;
-
                     case('1'):
                         $card->whereNull('deleted_at');
                         break;
                     default:
                         $card->whereNull('deleted_at');
-
                 }
+            });
+            $card->when($request->has('date') && $request->date != '', function ($card) use ($request){
+                $card->where('created_at', $request->date);
+            });
+            $card->when($request->has('status') && $request->status == '1', function ($card) use ($request){
+                $card->whereNull('deleted_at');
+            });
+            $card->when($request->has('status') && $request->status == '0', function ($card) use ($request){
+                $card->onlyTrashed();
             });
 
             $card = $card->get();
