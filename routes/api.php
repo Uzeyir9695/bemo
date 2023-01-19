@@ -21,9 +21,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     $user =  auth('sanctum')->user();
     return $user;
 });
-Route::get('list-cards', [\App\Http\Controllers\CardController::class, 'filterCard'])->name('list-cards');
 Route::middleware('auth:sanctum')->group(function () {
-
+    Route::get('list-cards', [\App\Http\Controllers\CardController::class, 'filterCard'])->name('list-cards');
 });
 Route::apiResource('card', \App\Http\Controllers\CardController::class);
 Route::apiResource('column', \App\Http\Controllers\ColumnController::class);
