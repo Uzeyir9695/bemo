@@ -216,9 +216,10 @@ data() {
 </script>
 
 <style>
-
 .board {
-    margin-left: 20px;
+    margin: 20px auto;
+    max-width: calc(100% - 20px);
+    padding: 10px;
 }
 .column-title {
     border-radius: 50px;

@@ -40,10 +40,8 @@ class ColumnController extends Controller
             'title' => $request->title,
         ]);
 
-
         return response()->json(['data' => $column, 'message' => 'Column added succssfully', 'status' => 201]);
     }
-
 
     /**
      * Remove the specified resource from storage.

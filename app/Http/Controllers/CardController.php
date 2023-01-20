@@ -116,16 +116,6 @@ class CardController extends Controller
             return response()->json(['error' => 'Invalid Token!'],  401);
         }
     }
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.
@@ -136,17 +126,21 @@ class CardController extends Controller
      */
     public function update(Request $request, Card $card)
     {
-        dd($request->all());
-    }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+            $validator = Validator::make($request->only(['title', 'description']), [
+                'title' => 'required|max:60',
+                'description' => 'required|max:255',
+            ]);
+//
+            if($validator->fails()) {
+                return response()->json(['error' => $validator->errors()], 422);
+            }
+            $card->update([
+                'column_id' => $request->column_id,
+                'title' => $request->title,
+                'description' => $request->description
+            ]);
+
+            return response()->json(['message' => 'Congrats! Card updated successfully!'], 201);
     }
 }
